@@ -1,0 +1,44 @@
+### REGISTER CUSTOMER
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "name": "Kholik",
+    "email": "kholik@gmail.com",
+    "password": "kholik123",
+    "phone": "081326117144",
+    "role": "CUSTOMER"
+}
+
+### REGISTER DRIVER
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "name": "budi",
+    "email": "budi@gmail.com",
+    "password": "budi123456",
+    "phone": "081326117155",
+    "role": "DRIVER"
+}
+
+### REGISTER MERCHANT
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "name": "Warteg",
+    "email": "wartegk@gmail.com",
+    "password": "warteg123456",
+    "phone": "081326117166",
+    "role": "MERCHANT"
+}
+
+### LOGIN
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "kholik@gmail.com",
+    "password": "kholik123"
+}

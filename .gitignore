@@ -1,0 +1,34 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# Go build
+/bin/
+/build/
+/dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test & Coverage
+*.test
+*.out
+coverage.out
+coverage.html
+
+# Air
+tmp/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
