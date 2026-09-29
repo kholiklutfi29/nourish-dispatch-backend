@@ -123,6 +123,9 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 	// change user phone
 	protected.PATCH("/users/me/phone", userHandler.ChangeUserPhone)
 
+	// change password
+	protected.PATCH("/users/me/password", userHandler.ChangeUserPassword)
+
 	// example when other router must pass middleware auth
 		// protected.GET("/users/me", userHandler.Me)
 

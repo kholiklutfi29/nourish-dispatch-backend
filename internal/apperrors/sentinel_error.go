@@ -9,4 +9,6 @@ var (
 	ErrAccountInactive        = errors.New("account is inactive")
 
 	ErrInvalidRole = errors.New("invalid user role")
+
+	ErrInternal = errors.New("internal server error")
 )

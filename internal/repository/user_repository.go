@@ -189,6 +189,23 @@ func (r *UserRepository) FindByID(ctx context.Context, id uuid.UUID) (*models.Us
 	return &user, nil
 }
 
+func (r *UserRepository) UpdatePassword(
+	ctx context.Context,
+	userID uuid.UUID,
+	passwordHash string,
+) error {
+	_, err := r.db.ExecContext(
+		ctx,
+		`
+			UPDATE users
+			SET password_hash = $1,
+				updated_at = NOW()
+			WHERE id = $2
+		`, passwordHash, userID,
+	)
+	return err
+}
+
 func (r *UserRepository) UpdatePhone(
 	ctx context.Context,
 	userID uuid.UUID,
