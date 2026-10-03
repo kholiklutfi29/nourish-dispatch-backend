@@ -1,0 +1,27 @@
+### UPDATE NAME USER
+PATCH  http://localhost:8080/api/v1/users/me/name
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOWU4MmRmZDktMWZjOC00NWM0LTlhMTgtOGI1ZDEwMmJlM2U3Iiwicm9sZSI6IkNVU1RPTUVSIiwic3ViIjoiOWU4MmRmZDktMWZjOC00NWM0LTlhMTgtOGI1ZDEwMmJlM2U3IiwiZXhwIjoxNzg2Nzc5NjU1LCJpYXQiOjE3ODY2OTMyNTV9.HbPlzelpi-SERjtfVchGL1xMwnm3tvgBhV58dtRMf0w
+Content-Type: application/json
+
+{
+    "new_name": "Kholik Al Lutfi"
+}
+
+### UPDATE NAME USER
+PATCH  http://localhost:8080/api/v1/users/me/name
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOWU4MmRmZDktMWZjOC00NWM0LTlhMTgtOGI1ZDEwMmJlM2U3Iiwicm9sZSI6IkNVU1RPTUVSIiwic3ViIjoiOWU4MmRmZDktMWZjOC00NWM0LTlhMTgtOGI1ZDEwMmJlM2U3IiwiZXhwIjoxNzg2Nzc5NjU1LCJpYXQiOjE3ODY2OTMyNTV9.HbPlzelpi-SERjtfVchGL1xMwnm3tvgBhV58dtRMf0w
+Content-Type: application/json
+
+{
+    "new_name": "Kholik Al Lutfi"
+}
+
+### UPADATE PASSWORD USER
+PATCH  http://localhost:8080/api/v1/users/me/password
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOWU4MmRmZDktMWZjOC00NWM0LTlhMTgtOGI1ZDEwMmJlM2U3Iiwicm9sZSI6IkNVU1RPTUVSIiwic3ViIjoiOWU4MmRmZDktMWZjOC00NWM0LTlhMTgtOGI1ZDEwMmJlM2U3IiwiZXhwIjoxNzkwNzczODYzLCJpYXQiOjE3OTA2ODc0NjN9.Xdfkiav4F-E6hR3dvl1PeWTigqUddaxt0lDfKN3XuDM
+Content-Type: application/json
+
+{
+    "old_password": "kholik123",
+    "new_password": "kholiklutfi"
+}
