@@ -57,6 +57,13 @@ func InternalServerError(
 	Error(c, http.StatusInternalServerError, message)
 }
 
+func NotFound(
+    c *gin.Context,
+    message string,
+) {
+    Error(c, http.StatusNotFound, message)
+}
+
 // package response
 
 // import (
