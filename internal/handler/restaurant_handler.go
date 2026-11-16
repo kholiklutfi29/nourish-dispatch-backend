@@ -116,7 +116,7 @@ func (h *RestaurantHandler) SoftDeleteRestaurant(c *gin.Context) {
 	}
 
 	// get restaurant id from URL parameter
-	restaurantID, err := uuid.Parse(c.Param("id"))
+	restaurantID, err := uuid.Parse(c.Param("id"))//
 	if err != nil {
 		response.BadRequest(c, "Invalid restaurant ID")
 	}
