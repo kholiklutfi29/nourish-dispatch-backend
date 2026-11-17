@@ -60,6 +60,11 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		restaurantRepository,
 	)
 
+	driverService := service.NewDriverService(
+		db,
+		driverRepository,
+	)
+
 	// =====================================
 	// Handler
 	// =====================================
@@ -74,6 +79,10 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
 	restaurantHandler := handler.NewRestaurantHandler(
 		restaurantService,
+	)
+
+	driverHandler := handler.NewDriverHandler(
+		driverService,
 	)
 
 	// =====================================
@@ -144,7 +153,7 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 	// =====================================
 
 	// create new restaurant
-	protected.POST("/restaurant", restaurantHandler.CreateRestaurant)
+	protected.POST("/restaurant", restaurantHandler.CreateRestaurant) // no need to use
 
 	// get all restaurant
 	api.GET("/restaurants", restaurantHandler.GetAllRestaurants)
@@ -162,7 +171,48 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 	protected.GET("/restaurants/me", restaurantHandler.GetMyRestaurants)
 
 	// update restaurant status
-	protected.PATCH("restaurants/:id/", restaurantHandler.UpdateRestaurantStatus)
+	protected.PATCH("/restaurants/:id/", restaurantHandler.UpdateRestaurantStatus)
+
+	// =====================================
+	// Driver Routes
+	// =====================================
+
+	// -------------------------------------
+	// Protected Routes - DRIVER
+	// -------------------------------------
+
+	driver := protected.Group("/drivers")
+	driver.Use(middleware.RequireRole("DRIVER"))
+
+	{
+		// Get driver profile
+		driver.GET("/profile", driverHandler.GetDriverProfile)
+
+		// Get driver details
+		driver.GET("/me", driverHandler.GetDriverDetails)
+
+		// Update driver profile
+		driver.PATCH("/profile", driverHandler.UpdateDriverProfile)
+
+		// Update driver status
+		driver.PATCH("/status", driverHandler.UpdateDriverStatus)
+	}
+
+	// -------------------------------------
+	// Protected Routes - ADMIN
+	// -------------------------------------
+
+	adminDrivers := protected.Group("/drivers")
+	adminDrivers.Use(middleware.RequireRole("ADMIN"))
+
+	{
+		// Get all drivers
+		adminDrivers.GET("", driverHandler.GetAllDrivers)
+
+		// Get drivers by status
+		adminDrivers.GET("/status", driverHandler.GetDriverByStatus)
+	}
+
 
 	// example when other router must pass middleware auth
 		// protected.GET("/users/me", userHandler.Me)
