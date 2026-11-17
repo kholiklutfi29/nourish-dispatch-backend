@@ -55,6 +55,11 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		userRepository,
 	)
 
+	restaurantService := service.NewRestaurantService(
+		db,
+		restaurantRepository,
+	)
+
 	// =====================================
 	// Handler
 	// =====================================
@@ -65,6 +70,10 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
 	userHandler := handler.NewUserHandler(
 		userService,
+	)
+
+	restaurantHandler := handler.NewRestaurantHandler(
+		restaurantService,
 	)
 
 	// =====================================
@@ -117,6 +126,10 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		middleware.Auth(jwtService),
 	)
 
+	// =====================================
+	// Users Routes
+	// =====================================
+
 	// change user name
 	protected.PATCH("/users/me/name", userHandler.ChangeUserName)
 
@@ -125,6 +138,31 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
 	// change password
 	protected.PATCH("/users/me/password", userHandler.ChangeUserPassword)
+
+	// =====================================
+	//  Restaurant Routes
+	// =====================================
+
+	// create new restaurant
+	protected.POST("/restaurant", restaurantHandler.CreateRestaurant)
+
+	// get all restaurant
+	api.GET("/restaurants", restaurantHandler.GetAllRestaurants)
+
+	// get restaurant by id
+	api.GET("/restaurants/:id", restaurantHandler.GetRestaurantByID)
+
+	// soft delete
+	protected.DELETE("/restaurants/:id", restaurantHandler.SoftDeleteRestaurant)
+
+	// update restaurant
+	protected.PATCH("/restaurants/:id", restaurantHandler.UpdateRestaurant)
+
+	// get owner restaurant
+	protected.GET("/restaurants/me", restaurantHandler.GetMyRestaurants)
+
+	// update restaurant status
+	protected.PATCH("restaurants/:id/", restaurantHandler.UpdateRestaurantStatus)
 
 	// example when other router must pass middleware auth
 		// protected.GET("/users/me", userHandler.Me)

@@ -11,4 +11,9 @@ var (
 	ErrInvalidRole = errors.New("invalid user role")
 
 	ErrInternal = errors.New("internal server error")
+
+	ErrRestaurantNotFound = errors.New("restaurant not found")
+	ErrInvalidRestaurantName = errors.New("restaurant name is required")
+	ErrInvalidRestaurantOwnerID = errors.New("invalid restaurant owner id")
+	ErrInvalidRestaurantData = errors.New("invalid restaurant data")
 )
