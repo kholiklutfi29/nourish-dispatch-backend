@@ -279,7 +279,7 @@ func (r *DriverRepository) GetDriverDetails(
         FROM drivers d
         INNER JOIN users u ON u.id = d.user_id
         WHERE d.user_id = $1
-          AND u.role = 'DRIVER
+          AND u.role = 'DRIVER'
 	`
 	driver := &models.DriverDetail{}
 

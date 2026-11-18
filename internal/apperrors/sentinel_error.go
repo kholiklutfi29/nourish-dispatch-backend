@@ -19,4 +19,6 @@ var (
 
 	ErrDriverNotFound = errors.New("driver not found")
 	ErrInvalidDriverStatus = errors.New("driver status not valid")
+
+	ErrCustomerNotFound = errors.New("customer not found")
 )
