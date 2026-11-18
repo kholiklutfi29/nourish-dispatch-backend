@@ -16,4 +16,7 @@ var (
 	ErrInvalidRestaurantName = errors.New("restaurant name is required")
 	ErrInvalidRestaurantOwnerID = errors.New("invalid restaurant owner id")
 	ErrInvalidRestaurantData = errors.New("invalid restaurant data")
+
+	ErrDriverNotFound = errors.New("driver not found")
+	ErrInvalidDriverStatus = errors.New("driver status not valid")
 )
