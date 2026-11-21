@@ -65,6 +65,11 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		driverRepository,
 	)
 
+	customerService := service.NewCustomerService(
+		db,
+		customerRepository,
+	)
+
 	// =====================================
 	// Handler
 	// =====================================
@@ -85,6 +90,9 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		driverService,
 	)
 
+	customerHandler := handler.NewCustomerHandler(
+		customerService,
+	)
 	// =====================================
 	// Gin
 	// =====================================
@@ -211,6 +219,27 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
 		// Get drivers by status
 		adminDrivers.GET("/status", driverHandler.GetDriverByStatus)
+	}
+
+	// =====================================
+	// Customer Routes
+	// =====================================
+
+	// -------------------------------------
+	// Protected Routes - Customer
+	// -------------------------------------
+	customer := protected.Group("/customers")
+	customer.Use(middleware.RequireRole("CUSTOMER"))
+
+	{	
+		// get customer profile
+		customer.GET("/me", customerHandler.GetCustomerProfile)
+
+		// get customer address
+		customer.GET("/me/address", customerHandler.GetCostumerAddress)
+
+		// update customer address
+		customer.PATCH("/me/address", customerHandler.UpdateCustomerAddress)
 	}
 
 
