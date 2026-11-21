@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 
 	"github.com/google/uuid"
 	"github.com/kholiklutfi29/nourish-dispatch/internal/apperrors"
@@ -90,7 +91,7 @@ func (r *RestaurantRepository) UpdateRestaurantStatus(
 			AND is_active = true
 	`
 	result, err := r.db.ExecContext(
-		ctx, query, isOpen, restaurantID, ownerID, 
+		ctx, query, isOpen, restaurantID, ownerID,
 	)
 	if err != nil {
 		return err
@@ -224,7 +225,6 @@ func (r *RestaurantRepository) SoftDeleteRestaurant(
 	return nil
 }
 
-
 func (r *RestaurantRepository) GetRestaurantByID(
 	ctx context.Context,
 	id uuid.UUID,
@@ -332,3 +332,31 @@ func (r *RestaurantRepository) GetAllRestaurants(
 	return restaurants, nil
 }
 
+func (r *RestaurantRepository) GetRestaurantIDByOwner(
+    ctx context.Context,
+    ownerID uuid.UUID,
+) (uuid.UUID, error) {
+    query := `
+        SELECT id
+        FROM restaurants
+        WHERE owner_id = $1
+    `
+
+    var restaurantID uuid.UUID
+
+    err := r.db.QueryRowContext(
+        ctx,
+        query,
+        ownerID,
+    ).Scan(&restaurantID)
+
+    if err != nil {
+        if errors.Is(err, sql.ErrNoRows) {
+            return uuid.Nil, apperrors.ErrRestaurantNotFound
+        }
+
+        return uuid.Nil, err
+    }
+
+    return restaurantID, nil
+}

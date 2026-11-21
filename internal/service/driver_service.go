@@ -41,9 +41,7 @@ func (s *DriverService) GetDriverProfile(
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, apperrors.ErrDriverNotFound
 		}
-		return nil,errors.New(
-			"failed to get driver profile",
-		)
+		return nil, fmt.Errorf("failed to get driver profile: %w", err)
 	}
 
 	// map model to response dto
@@ -73,7 +71,7 @@ func (s *DriverService) UpdateDriverProfile(
 			return apperrors.ErrDriverNotFound
 		}
 
-		return errors.New("Failed to update driver profile")
+		return fmt.Errorf("failed to update driver profile %w", err)
 	}
 
 	return nil
@@ -106,7 +104,7 @@ func (s *DriverService) GetAllDrivers(
 	// map model to response dto
 	responses := make([]dto.DriverResponse, 0, len(drivers))
 	for _, driver := range drivers {
-		response:= dto.DriverResponse{
+		response := dto.DriverResponse{
 			UserID: driver.UserID,
 			VehicleType: driver.VehicleType,
 			VehiclePlate: driver.VehiclePlate,

@@ -32,6 +32,7 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 	customerRepository := repository.NewCustomerRepository(db)
 	driverRepository := repository.NewDriverRepository(db)
 	restaurantRepository := repository.NewRestaurantRepository(db)
+	menuRepository := repository.NewMenuRepository(db)
 
 	// =====================================
 	// Service
@@ -70,6 +71,11 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		customerRepository,
 	)
 
+	menuService := service.NewMenuService(
+		db,
+		menuRepository,
+	)
+
 	// =====================================
 	// Handler
 	// =====================================
@@ -93,6 +99,11 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 	customerHandler := handler.NewCustomerHandler(
 		customerService,
 	)
+
+	menuHandler := handler.NewMenuHandler(
+		menuService, restaurantService,
+	)
+
 	// =====================================
 	// Gin
 	// =====================================
@@ -242,6 +253,35 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		customer.PATCH("/me/address", customerHandler.UpdateCustomerAddress)
 	}
 
+	// =====================================
+	// Menu Routes
+	// =====================================
+
+	// -------------------------------------
+	// Protected Routes - MERCHANT
+	// -------------------------------------
+
+	merchant := protected.Group("/restaurant/me")
+	merchant.Use(middleware.RequireRole("MERCHANT"))
+	{
+		merchant.POST("/menus", menuHandler.CreateMenu)
+		merchant.GET("/menus", menuHandler.GetMyMenu)
+		merchant.GET("/menus/:id", menuHandler.GetMenuDetail)
+		merchant.PATCH("/menus/:id", menuHandler.UpdateMenuInfo)
+		merchant.PATCH("/menus/price/:id", menuHandler.UpdateMenuPrice)
+		merchant.PATCH("/menus/availability/:id", menuHandler.UpdateMenuAvailability)
+		merchant.PATCH("/menus/delete/:id", menuHandler.SoftDeleteMenu)
+	}
+
+	// -------------------------------------
+	// Protected Routes - CUSTOMER MENU
+	// -------------------------------------
+	customerMenu := protected.Group("/restaurant/customer")
+	customerMenu.Use(middleware.RequireRole("CUSTOMER"))
+	{
+		customerMenu.GET("/menus/:restaurantID", menuHandler.GetRestaurantMenus)
+		customerMenu.GET("/menus/detail/:id", menuHandler.GetMenuDetail)
+	}
 
 	// example when other router must pass middleware auth
 		// protected.GET("/users/me", userHandler.Me)

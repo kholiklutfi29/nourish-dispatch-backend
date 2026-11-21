@@ -83,6 +83,7 @@ func (h *RestaurantHandler) GetRestaurantByID(c *gin.Context) {
 	restaurantID, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		response.BadRequest(c, "Invalid restaurant ID")
+		return
 	}
 
 	// call service

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/google/uuid"
@@ -317,4 +318,23 @@ func (s *RestaurantService) UpdateRestaurantStatus(
 		return errors.New("failed to update restaurant status")
 	}
 	return nil
+}
+
+func (s *RestaurantService) GetRestaurantIDByOwner(
+    ctx context.Context,
+    ownerID uuid.UUID,
+) (uuid.UUID, error) {
+    restaurantID, err := s.restaurantRepository.GetRestaurantIDByOwner(
+        ctx,
+        ownerID,
+    )
+    if err != nil {
+        if errors.Is(err, sql.ErrNoRows) {
+            return uuid.Nil, apperrors.ErrRestaurantNotFound
+        }
+
+        return uuid.Nil, fmt.Errorf("failed to get restaurant ID by owner: %w", err)
+    }
+
+    return restaurantID, nil
 }
