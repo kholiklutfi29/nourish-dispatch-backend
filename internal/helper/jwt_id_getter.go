@@ -27,7 +27,7 @@ func JWTIdGetter(c *gin.Context) (uuid.UUID, error) {
 
 	userUUID, err := uuid.Parse(userIDString)
 	if err != nil {
-		response.Unauthorized(c, "Invalid owner id")
+		response.Unauthorized(c, "Invalid user id")
 		return uuid.Nil, errors.New("Invalid user ID format")
 	}
 

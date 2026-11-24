@@ -338,3 +338,4 @@ func (s *RestaurantService) GetRestaurantIDByOwner(
 
     return restaurantID, nil
 }
+
