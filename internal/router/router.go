@@ -33,6 +33,7 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 	driverRepository := repository.NewDriverRepository(db)
 	restaurantRepository := repository.NewRestaurantRepository(db)
 	menuRepository := repository.NewMenuRepository(db)
+	cartRepository := repository.NewCartRepository(db)
 
 	// =====================================
 	// Service
@@ -76,6 +77,11 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		menuRepository,
 	)
 
+	cartService := service.NewCartService(
+		db,
+		cartRepository,
+	)
+
 	// =====================================
 	// Handler
 	// =====================================
@@ -102,6 +108,10 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
 	menuHandler := handler.NewMenuHandler(
 		menuService, restaurantService,
+	)
+
+	cartHandler := handler.NewCartHandler(
+		cartService,
 	)
 
 	// =====================================
@@ -285,6 +295,32 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
 	// example when other router must pass middleware auth
 		// protected.GET("/users/me", userHandler.Me)
+
+	// =====================================
+	// Cart Routes
+	// =====================================
+
+	// -------------------------------------
+	// Protected Routes - ADMIN
+	// -------------------------------------
+	adminCart := protected.Group("/admin/cart")
+	adminCart.Use(middleware.RequireRole("ADMIN"))
+
+	{
+		adminCart.GET("/:customer_id", cartHandler.GetCartByCustomer)
+	}
+
+	// -------------------------------------
+	// Protected Routes - CUSTOMER
+	// -------------------------------------
+	customerCart := protected.Group("/cart")
+	customerCart.Use(middleware.RequireRole("CUSTOMER"))
+
+	{
+		customerCart.POST("", cartHandler.CreateCart)
+		customerCart.GET("", cartHandler.GetMyCart)
+		customerCart.DELETE("", cartHandler.DeleteCart)
+	}
 
 	return r
 }
