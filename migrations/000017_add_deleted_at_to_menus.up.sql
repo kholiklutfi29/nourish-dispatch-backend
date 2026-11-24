@@ -1,0 +1,2 @@
+ALTER TABLE menus
+ADD COLUMN deleted_at TIMESTAMPTZ;

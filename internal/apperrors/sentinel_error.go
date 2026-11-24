@@ -21,4 +21,10 @@ var (
 	ErrInvalidDriverStatus = errors.New("driver status not valid")
 
 	ErrCustomerNotFound = errors.New("customer not found")
+
+	ErrMenuNotFound = errors.New("menu not found")
+
+	ErrInvalidMenuName = errors.New("menu name is required")
+
+	ErrInvalidMenuPrice = errors.New("menu price is required")
 )
