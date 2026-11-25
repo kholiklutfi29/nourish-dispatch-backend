@@ -34,6 +34,7 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 	restaurantRepository := repository.NewRestaurantRepository(db)
 	menuRepository := repository.NewMenuRepository(db)
 	cartRepository := repository.NewCartRepository(db)
+	cartItemRepository := repository.NewCartItemRepository(db)
 
 	// =====================================
 	// Service
@@ -82,6 +83,12 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		cartRepository,
 	)
 
+	cartItemService := service.NewCartItemService(
+		db,
+		cartItemRepository,
+		cartRepository,
+	)
+
 	// =====================================
 	// Handler
 	// =====================================
@@ -112,6 +119,10 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
 	cartHandler := handler.NewCartHandler(
 		cartService,
+	)
+
+	cartItemHandler := handler.NewCartItemHandler(
+		cartItemService, cartService,
 	)
 
 	// =====================================
@@ -320,6 +331,26 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 		customerCart.POST("", cartHandler.CreateCart)
 		customerCart.GET("", cartHandler.GetMyCart)
 		customerCart.DELETE("", cartHandler.DeleteCart)
+	}
+
+	// =====================================
+	// Cart Item Routes
+	// =====================================
+	adminCartItem := protected.Group("/admin/cart/items")
+	adminCartItem.Use(middleware.RequireRole("ADMIN"))
+	{
+
+	}
+
+	customerCartItem := protected.Group("/cart/items")
+	customerCartItem.Use(middleware.RequireRole("CUSTOMER"))
+
+	{
+		customerCartItem.POST("", cartItemHandler.CreateCartItem)
+		customerCartItem.GET("", cartItemHandler.GetCartItems)
+		customerCartItem.POST("/add", cartItemHandler.AddCartItem)
+		customerCartItem.DELETE("/:cartItemID", cartItemHandler.DeleteCartItem)
+		customerCartItem.DELETE("", cartItemHandler.ClearCartItems)
 	}
 
 	return r

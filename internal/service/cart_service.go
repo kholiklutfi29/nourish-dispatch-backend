@@ -70,8 +70,12 @@ func (s *CartService) GetCartByCustomer(
 	)
 
 	if err != nil {
-		return nil, err
-	}
+        if errors.Is(err, sql.ErrNoRows) {
+            return nil, apperrors.ErrCartNotFound
+        }
+
+        return nil, fmt.Errorf("failed to get cart by customer: %w", err)
+    }
 
 	// parse to dto
 	response := &dto.CartResponse{

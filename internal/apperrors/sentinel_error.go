@@ -29,4 +29,6 @@ var (
 	ErrInvalidMenuPrice = errors.New("menu price is required")
 
 	ErrCartNotFound = errors.New("cart not found")
+
+	ErrCartItemNotFound = errors.New("cart item not found")
 )
